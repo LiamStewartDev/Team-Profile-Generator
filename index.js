@@ -90,34 +90,87 @@ function writeToFile(fileName, data) { }
 
 
 function init() {
-    inquirer
-        .prompt(managerQuestions)
-        .then((data) => {
+    let allData = []
+    inquirer.prompt(managerQuestions)
+        .then(async (data) => {
             let roleQuestions = []
-            switch (data.choices) {
-                case "Engineer":
-                    roleQuestions = engineerQuestions;
-                    break;
-                case "Intern":
-                    roleQuestions = internQuestions;
-                    break;
-                default:
-                    const filename = 'main.html';
-                    const fileData =
-                                `<!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <title>Document</title>
-                        </head>
-                        <body>
+            while (true){
+                allData.push(data);
+                switch (data.addrole) {
+                    case "Engineer":
+                        roleQuestions = engineerQuestions;
+                        break;
+                    case "Intern":
+                        roleQuestions = internQuestions;
+                        break;
+                    default:
+                        let cardHtml = ''
+                                cardHtml += `<div class="card" style="width: 18rem;">
+                                <h4 class="card-title">${allData[0].managername}</h4>
+                                <h5 class="card-subtitle">Manager</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">ID: ${allData[0].managerid}</li>
+                                    <li class="list-group-item">Email: <a href="mailto:${allData[0].manageremail}">${allData[0].manageremail}</a></li>
+                                    <li class="list-group-item">Office number: ${allData[0].managerofficenumber}</li>
+                                </ul>`
+                        for (let i = 1; i < allData.length; i++) {
+                            if (allData[i-1].addrole === 'Engineer'){
+                                cardHtml += `<div class="card" style="width: 18rem;">
+                                    <h4 class="card-title">${allData[i].engineername}</h4>
+                                    <h5 class="card-subtitle">Engineer</h5>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">ID: ${allData[i].engineerid}</li>
+                                        <li class="list-group-item">Email: <a href="mailto:${allData[i].engineeremail}">${allData[i].engineeremail}</a></li>
+                                        <li class="list-group-item">GitHub: <a href="https://github.com/${allData[i].engineergithub}">${allData[i].engineergithub}</a></li>
+                                    </ul>
+                                </div> `
+                            }
+                            else if (allData[i-1].addrole === 'Intern') {
+                                cardHtml += `<div class="card" style="width: 18rem;">
+                                    <h4 class="card-title">${allData[i].internname}</h4>
+                                    <h5 class="card-subtitle">Intern</h5>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">ID: ${allData[i].internid}</li>
+                                        <li class="list-group-item">Email: <a href="mailto:${allData[i].internemail}">${allData[i].internemail}</a></li>
+                                        <li class="list-group-item">School: ${allData[i].internschool}</li>
+                                    </ul>
+                                </div> `
+                            }
+                        }
                         
-                        </body>
-                        </html>`
-                            fs.writeFile(filename, fileData, (err) =>
-                                err ? console.log(err) : console.log('Success!'))
+                    
+                        const filename = 'main.html';
+                        const fileData =
+                                    `<!DOCTYPE html>
+                            <html lang="en">
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+                                <link rel="stylesheet" href="./dist/style.css">
+                                <title>Document</title>
+                            </head>
+                            <body>
+                            <div class="header text-center">
+                            <h1>My Team</h1>
+                            </div>
+                            <div class="container">
+                            `
+                            + cardHtml + 
+                            `
+                            </div>
+                            </body>
+                            </html>`
+                        fs.writeFile(filename, fileData, (err) =>
+                            err ? console.log(err) : console.log('Success!'))
+                        return;
+                }
+                const response = await inquirer
+                    .prompt(roleQuestions)
+                    .then((newData) => {
+                        data = newData;
+                    })
             }
         })
 }
