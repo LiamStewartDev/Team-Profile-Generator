@@ -86,8 +86,6 @@ const internQuestions = [
         choices: ['Engineer', 'Intern', "I don't want to add any more team members"],
     }
 ]
-function writeToFile(fileName, data) { }
-
 
 function init() {
     let allData = []
@@ -106,8 +104,8 @@ function init() {
                     default:
                         let cardHtml = ''
                                 cardHtml += `<div class="card" style="width: 18rem;">
-                                <h4 class="card-title">${allData[0].managername}</h4>
-                                <h5 class="card-subtitle">Manager</h5>
+                                <h3 class="card-title">${allData[0].managername}</h3>
+                                <h6 class="card-subtitle">Manager</h6>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">ID: ${allData[0].managerid}</li>
                                     <li class="list-group-item">Email: <a href="mailto:${allData[0].manageremail}">${allData[0].manageremail}</a></li>
@@ -116,8 +114,8 @@ function init() {
                         for (let i = 1; i < allData.length; i++) {
                             if (allData[i-1].addrole === 'Engineer'){
                                 cardHtml += `<div class="card" style="width: 18rem;">
-                                    <h4 class="card-title">${allData[i].engineername}</h4>
-                                    <h5 class="card-subtitle">Engineer</h5>
+                                    <h3 class="card-title">${allData[i].engineername}</h3>
+                                    <h6 class="card-subtitle">Engineer</h6>
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">ID: ${allData[i].engineerid}</li>
                                         <li class="list-group-item">Email: <a href="mailto:${allData[i].engineeremail}">${allData[i].engineeremail}</a></li>
@@ -127,8 +125,8 @@ function init() {
                             }
                             else if (allData[i-1].addrole === 'Intern') {
                                 cardHtml += `<div class="card" style="width: 18rem;">
-                                    <h4 class="card-title">${allData[i].internname}</h4>
-                                    <h5 class="card-subtitle">Intern</h5>
+                                    <h3 class="card-title">${allData[i].internname}</h3>
+                                    <h6 class="card-subtitle">Intern</h6>
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">ID: ${allData[i].internid}</li>
                                         <li class="list-group-item">Email: <a href="mailto:${allData[i].internemail}">${allData[i].internemail}</a></li>
@@ -138,7 +136,6 @@ function init() {
                             }
                         }
                         
-                    
                         const filename = 'main.html';
                         const fileData =
                                     `<!DOCTYPE html>
